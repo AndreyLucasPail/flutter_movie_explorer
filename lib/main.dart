@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_movie_explorer/routes/app_routes.dart';
 import 'package:flutter_movie_explorer/ui/splash/splash_screen.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -14,6 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       initialRoute: SplashScreen.tag,
+      onGenerateRoute: AppRoutes.generateRoutes,
     );
   }
 }

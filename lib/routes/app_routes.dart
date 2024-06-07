@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movie_explorer/ui/home/home_screen.dart';
 import 'package:flutter_movie_explorer/ui/splash/splash_screen.dart';
 
 class AppRoutes {
@@ -12,6 +13,8 @@ class AppRoutes {
     switch (settings.name) {
       case SplashScreen.tag:
         return const SplashScreen();
+      case HomeScreen.tag:
+        return const HomeScreen();
       default:
         return null;
     }
