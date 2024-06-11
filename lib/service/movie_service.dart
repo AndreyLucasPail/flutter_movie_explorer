@@ -12,7 +12,7 @@ class MovieService {
 
   Future<List<MovieModel>> getMovies() async {
     final response = await _apiService.request(
-      "movie?include_adult=false&include_video=false&language=pt-BR",
+      "movie/popular?language=pt-BR&page=1",
     );
 
     List data = response["results"];
