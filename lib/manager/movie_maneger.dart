@@ -7,8 +7,13 @@ class MovieManeger extends ChangeNotifier {
 
   List<MovieModel> movies = [];
 
-  Future<void> getDataFromMovies() async {
-    movies = await _movieService.getMovies();
+  Future<void> getDataFromPopularMovies() async {
+    movies = await _movieService.getPopularMovies();
+    notifyListeners();
+  }
+
+  Future<void> getDataFromPlayingNow() async {
+    movies = await _movieService.getNowPlaying();
     notifyListeners();
   }
 }

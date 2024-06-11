@@ -10,9 +10,19 @@ class MovieService {
 
   final ApiService _apiService = ApiService();
 
-  Future<List<MovieModel>> getMovies() async {
+  Future<List<MovieModel>> getPopularMovies() async {
     final response = await _apiService.request(
       "movie/popular?language=pt-BR&page=1",
+    );
+
+    List data = response["results"];
+
+    return data.map((movie) => MovieModel.fromJson(movie)).toList();
+  }
+
+  Future<List<MovieModel>> getNowPlaying() async {
+    final response = await _apiService.request(
+      "movie/now_playing?language=pt-BR&page=1",
     );
 
     List data = response["results"];

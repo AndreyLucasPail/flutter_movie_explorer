@@ -1,6 +1,7 @@
 class MovieModel {
   MovieModel({
     this.id,
+    this.votes,
     this.originalTitle,
     this.originalLinguage,
     this.overview,
@@ -10,6 +11,7 @@ class MovieModel {
   });
 
   final int? id;
+  final num? votes;
   final String? originalTitle;
   final String? originalLinguage;
   final String? overview;
@@ -19,6 +21,7 @@ class MovieModel {
 
   factory MovieModel.fromJson(Map<String, dynamic> json) => MovieModel(
         id: json["id"],
+        votes: json["vote_average"],
         originalLinguage: json["original_language"],
         originalTitle: json["original_title"],
         overview: json["overview"],
