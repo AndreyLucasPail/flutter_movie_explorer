@@ -4,6 +4,8 @@ import 'package:flutter_movie_explorer/manager/movie_maneger.dart';
 import 'package:flutter_movie_explorer/ui/home/widgets/movie_card.dart';
 import 'package:flutter_movie_explorer/ui/home/widgets/popular_card.dart';
 import 'package:flutter_movie_explorer/utils/colors/custom_colors.dart';
+import 'package:flutter_movie_explorer/widgets/shimmer_card.dart';
+import 'package:flutter_movie_explorer/widgets/shimmer_loading.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -140,16 +142,30 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget upComingMovies() {
     return Consumer<MovieManeger>(
       builder: (context, movieManeger, child) {
-        return CarouselSlider(
-          options: CarouselOptions(
-            autoPlay: false,
-            aspectRatio: 1.0,
-            enlargeCenterPage: true,
-          ),
-          items: movieManeger.movies
-              .map((movie) => MovieCard(img: movie.poster))
-              .toList(),
-        );
+        if (movieManeger.movies.isEmpty) {
+          return CarouselSlider.builder(
+            itemCount: 5,
+            itemBuilder: (context, index, realIndex) {
+              return const ShimmerLoading();
+            },
+            options: CarouselOptions(
+              autoPlay: false,
+              aspectRatio: 1.0,
+              enlargeCenterPage: true,
+            ),
+          );
+        } else {
+          return CarouselSlider(
+            options: CarouselOptions(
+              autoPlay: false,
+              aspectRatio: 1.0,
+              enlargeCenterPage: true,
+            ),
+            items: movieManeger.movies
+                .map((movie) => MovieCard(img: movie.poster))
+                .toList(),
+          );
+        }
       },
     );
   }
@@ -157,14 +173,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget popularMovies() {
     return Consumer<MovieManeger>(
       builder: (context, movieManeger, child) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: movieManeger.movies
-              .map(
-                (movie) => Popularcard(movie: movie),
-              )
-              .toList(),
-        );
+        if (movieManeger.movies.isEmpty) {
+          return Column(
+            children: List.generate(5, (index) => const ShimmerCard()),
+          );
+        } else {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: movieManeger.movies
+                .map(
+                  (movie) => Popularcard(movie: movie),
+                )
+                .toList(),
+          );
+        }
       },
     );
   }

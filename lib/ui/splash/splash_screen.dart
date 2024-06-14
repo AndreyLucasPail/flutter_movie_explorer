@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_movie_explorer/ui/home/home_screen.dart';
 import 'package:flutter_movie_explorer/utils/colors/custom_colors.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -32,13 +33,37 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget body() {
-    return const Center(
-      child: Text(
-        "Movie Explorer",
-        style: TextStyle(
-          fontSize: 36,
-          color: CustomColors.orange,
-        ),
+    return Center(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          shimmerContainer(),
+          const Text(
+            "Movie Explorer",
+            style: TextStyle(
+              fontSize: 36,
+              color: CustomColors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget shimmerContainer() {
+    return Shimmer(
+      direction: ShimmerDirection.ltr,
+      gradient: const LinearGradient(
+        colors: [
+          CustomColors.darkNavy,
+          Color(0xFF000435),
+          Color(0xFF080E4B),
+        ],
+      ),
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.blue,
       ),
     );
   }
