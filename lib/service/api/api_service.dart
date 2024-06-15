@@ -26,7 +26,6 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print(response.data);
       return response.data;
     } else {
       throw Exception("Failed to load data");

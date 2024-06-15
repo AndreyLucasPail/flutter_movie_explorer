@@ -54,6 +54,8 @@ class _SplashScreenState extends State<SplashScreen> {
     return Shimmer(
       direction: ShimmerDirection.ltr,
       gradient: const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
         colors: [
           CustomColors.darkNavy,
           Color(0xFF000435),
