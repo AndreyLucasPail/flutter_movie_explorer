@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
               enlargeCenterPage: true,
             ),
             items: movieManeger.movies
-                .map((movie) => MovieCard(img: movie.poster))
+                .map((movie) => MovieCard(movie: movie))
                 .toList(),
           );
         }

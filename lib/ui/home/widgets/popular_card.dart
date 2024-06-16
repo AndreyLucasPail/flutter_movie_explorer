@@ -49,7 +49,7 @@ class Popularcard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         image: DecorationImage(
                           image: NetworkImage(
-                            "https://image.tmdb.org/t/p/w200${movie!.poster}",
+                            "https://image.tmdb.org/t/p/w500${movie!.poster}",
                           ),
                           fit: BoxFit.fill,
                           filterQuality: FilterQuality.high,

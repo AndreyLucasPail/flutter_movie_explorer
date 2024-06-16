@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_movie_explorer/model/movie_model.dart';
 import 'package:flutter_movie_explorer/utils/colors/custom_colors.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class MovieScreenArgs {
   MovieScreenArgs({this.movie});
@@ -18,6 +19,7 @@ class MovieScreen extends StatefulWidget {
 
 class _MovieScreenState extends State<MovieScreen> {
   MovieModel? movie;
+  Color? backgroundColor;
 
   @override
   void didChangeDependencies() {
@@ -26,11 +28,16 @@ class _MovieScreenState extends State<MovieScreen> {
     final args = ModalRoute.of(context)!.settings.arguments as MovieScreenArgs;
 
     movie = args.movie;
+
+    if (movie != null) {
+      updateBackgroundColor("https://image.tmdb.org/t/p/w500${movie!.poster}");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: body(),
     );
   }
@@ -60,7 +67,8 @@ class _MovieScreenState extends State<MovieScreen> {
               fit: BoxFit.fill,
               filterQuality: FilterQuality.high,
               image: NetworkImage(
-                  "https://image.tmdb.org/t/p/w200${movie!.poster}"),
+                "https://image.tmdb.org/t/p/w500${movie!.poster}",
+              ),
             ),
           ),
         ),
@@ -92,5 +100,19 @@ class _MovieScreenState extends State<MovieScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> updateBackgroundColor(String url) async {
+    final PaletteGenerator paletteGenerator =
+        await PaletteGenerator.fromImageProvider(
+      NetworkImage(
+        url,
+      ),
+    );
+
+    setState(() {
+      backgroundColor =
+          paletteGenerator.dominantColor?.color ?? CustomColors.black;
+    });
   }
 }
