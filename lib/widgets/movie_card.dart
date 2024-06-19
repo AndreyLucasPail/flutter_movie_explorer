@@ -6,8 +6,8 @@ import 'package:flutter_movie_explorer/model/movie_model.dart';
 import 'package:flutter_movie_explorer/ui/movie_screen/movie_screen.dart';
 import 'package:flutter_movie_explorer/utils/colors/custom_colors.dart';
 
-class Popularcard extends StatelessWidget {
-  const Popularcard({
+class MovieCard extends StatelessWidget {
+  const MovieCard({
     super.key,
     this.movie,
   });

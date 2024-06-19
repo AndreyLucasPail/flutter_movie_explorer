@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_movie_explorer/ui/home/home_screen.dart';
 import 'package:flutter_movie_explorer/utils/colors/custom_colors.dart';
 import 'package:shimmer/shimmer.dart';
+import 'dart:math' as math;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,16 +13,18 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 2),
+  )..repeat();
+
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(
-      const Duration(seconds: 2),
-    ).then(
-      (value) => navigateToHome(),
-    );
+    _controller.forward().whenComplete(() => navigateToHome());
   }
 
   @override
@@ -38,12 +41,20 @@ class _SplashScreenState extends State<SplashScreen> {
         alignment: Alignment.center,
         children: [
           shimmerContainer(),
-          const Text(
-            "Movie Explorer",
-            style: TextStyle(
-              fontSize: 36,
-              color: CustomColors.white,
-            ),
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (_, child) {
+              return Transform.rotate(
+                angle: _controller.value * 2 * math.pi,
+                child: const Text(
+                  "Movie Explorer",
+                  style: TextStyle(
+                    fontSize: 36,
+                    color: CustomColors.orange,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

@@ -1,8 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_movie_explorer/manager/movie_maneger.dart';
-import 'package:flutter_movie_explorer/ui/home/widgets/movie_card.dart';
-import 'package:flutter_movie_explorer/ui/home/widgets/popular_card.dart';
+import 'package:flutter_movie_explorer/ui/home/widgets/movie_banner.dart';
+import 'package:flutter_movie_explorer/widgets/movie_card.dart';
+import 'package:flutter_movie_explorer/ui/search_screen/search_screen.dart';
 import 'package:flutter_movie_explorer/utils/colors/custom_colors.dart';
 import 'package:flutter_movie_explorer/widgets/shimmer_card.dart';
 import 'package:flutter_movie_explorer/widgets/shimmer_loading.dart';
@@ -18,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -38,32 +41,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget body() {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            CustomColors.darkNavy,
-            Color(0xFF000435),
-            Color(0xFF080E4B),
-          ],
-        ),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            appBar(),
-            search(),
-            header("Filmes em Cartaz"),
-            upComingMovies(),
-            const SizedBox(height: 20),
-            header("Filmes Populares"),
-            popularMovies(),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          appBar(),
+          search(),
+          header("Filmes em Cartaz"),
+          upComingMovies(),
+          const SizedBox(height: 20),
+          header("Filmes Populares"),
+          popularMovies(),
+        ],
       ),
     );
   }
@@ -92,7 +80,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: TextFormField(
+        controller: _searchController,
         cursorColor: CustomColors.orange,
+        onFieldSubmitted: (value) {
+          Navigator.pushNamed(
+            context,
+            SearchScreen.tag,
+            arguments: SearchScreenArgs(
+              search: _searchController.text,
+            ),
+          );
+          _searchController.clear();
+        },
+        style: const TextStyle(
+          color: CustomColors.white,
+        ),
         decoration: InputDecoration(
           filled: true,
           fillColor: CustomColors.black,
@@ -142,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget upComingMovies() {
     return Consumer<MovieManeger>(
       builder: (context, movieManeger, child) {
-        if (movieManeger.movies.isEmpty) {
+        if (movieManeger.nowPlaying.isEmpty) {
           return CarouselSlider.builder(
             itemCount: 5,
             itemBuilder: (context, index, realIndex) {
@@ -161,8 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
               aspectRatio: 1.0,
               enlargeCenterPage: true,
             ),
-            items: movieManeger.movies
-                .map((movie) => MovieCard(movie: movie))
+            items: movieManeger.nowPlaying
+                .map((movie) => MovieBanner(movie: movie))
                 .toList(),
           );
         }
@@ -173,16 +175,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget popularMovies() {
     return Consumer<MovieManeger>(
       builder: (context, movieManeger, child) {
-        if (movieManeger.movies.isEmpty) {
+        if (movieManeger.popularMovies.isEmpty) {
           return Column(
             children: List.generate(5, (index) => const ShimmerCard()),
           );
         } else {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: movieManeger.movies
+            children: movieManeger.popularMovies
                 .map(
-                  (movie) => Popularcard(movie: movie),
+                  (movie) => MovieCard(movie: movie),
                 )
                 .toList(),
           );

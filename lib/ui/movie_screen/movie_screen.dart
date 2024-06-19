@@ -1,7 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_movie_explorer/model/movie_model.dart';
 import 'package:flutter_movie_explorer/utils/colors/custom_colors.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 class MovieScreenArgs {
   MovieScreenArgs({this.movie});
@@ -19,7 +19,6 @@ class MovieScreen extends StatefulWidget {
 
 class _MovieScreenState extends State<MovieScreen> {
   MovieModel? movie;
-  Color? backgroundColor;
 
   @override
   void didChangeDependencies() {
@@ -28,16 +27,12 @@ class _MovieScreenState extends State<MovieScreen> {
     final args = ModalRoute.of(context)!.settings.arguments as MovieScreenArgs;
 
     movie = args.movie;
-
-    if (movie != null) {
-      updateBackgroundColor("https://image.tmdb.org/t/p/w500${movie!.poster}");
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: CustomColors.black,
       body: body(),
     );
   }
@@ -45,8 +40,12 @@ class _MovieScreenState extends State<MovieScreen> {
   Widget body() {
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           movieBanner(),
+          votesAndReleaseDate(),
+          movieTitle(),
+          description(),
         ],
       ),
     );
@@ -102,17 +101,83 @@ class _MovieScreenState extends State<MovieScreen> {
     );
   }
 
-  Future<void> updateBackgroundColor(String url) async {
-    final PaletteGenerator paletteGenerator =
-        await PaletteGenerator.fromImageProvider(
-      NetworkImage(
-        url,
+  Widget movieTitle() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+      child: AutoSizeText(
+        movie!.title!,
+        style: const TextStyle(
+          fontSize: 36,
+          color: CustomColors.orange,
+        ),
       ),
     );
+  }
 
-    setState(() {
-      backgroundColor =
-          paletteGenerator.dominantColor?.color ?? CustomColors.black;
-    });
+  Widget description() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: AutoSizeText(
+        movie!.overview!,
+        style: const TextStyle(
+          fontSize: 18,
+          color: CustomColors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget votesAndReleaseDate() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.star,
+                color: CustomColors.orange,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                movie!.votes!.toStringAsFixed(1),
+                style: const TextStyle(
+                  color: CustomColors.orange,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 150),
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: CustomColors.backGrey,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                const Text(
+                  "Data de Lançamento:",
+                  style: TextStyle(
+                    color: CustomColors.white,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  movie!.releaseDate!,
+                  style: const TextStyle(
+                    color: CustomColors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

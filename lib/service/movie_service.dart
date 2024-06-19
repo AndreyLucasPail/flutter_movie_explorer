@@ -29,4 +29,14 @@ class MovieService {
 
     return data.map((movie) => MovieModel.fromJson(movie)).toList();
   }
+
+  Future<List<MovieModel>> searchMovies(String query) async {
+    final response = await _apiService.request(
+      "search/movie?query=$query&include_adult=false&language=pt-BR&page=1",
+    );
+
+    List data = response["results"];
+
+    return data.map((movies) => MovieModel.fromJson(movies)).toList();
+  }
 }

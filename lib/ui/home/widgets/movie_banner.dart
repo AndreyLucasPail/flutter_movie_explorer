@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_movie_explorer/model/movie_model.dart';
 import 'package:flutter_movie_explorer/ui/movie_screen/movie_screen.dart';
 
-class MovieCard extends StatelessWidget {
-  const MovieCard({super.key, this.movie});
+class MovieBanner extends StatelessWidget {
+  const MovieBanner({super.key, this.movie});
 
   final MovieModel? movie;
 
